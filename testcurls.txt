@@ -1,0 +1,113 @@
+<==============DB LOGIN===============>
+
+psql -U vearon -d blogdb
+<=====================================>
+
+
+<========== TEST USER REGISTER ==========> 
+
+curl -X POST http://127.0.0.1:5000/api/register \
+-H "Content-Type: application/json" \
+-d '{"username": "admin", "email": "admin@example.com", "password": "securepass"}'
+
+<=====================================>
+
+
+<========== TEST USER LOGIN   ==========>
+
+curl -X POST http://127.0.0.1:5000/api/login \
+-H "Content-Type: application/json" \
+-d '{
+  "email": "admin@example.com",
+  "password": "securepass"
+}'
+
+<=====================================>
+
+
+<==========   GET USER INFO   ==========>
+
+curl -X GET http://127.0.0.1:5000/api/me \
+-H "Authorization: Bearer <your_token>"
+
+<=====================================>
+
+<==========   GET ALL POSTS   ==========>
+curl http://127.0.0.1:5000/api/posts
+<=====================================>
+
+
+<==========   CREATE POST   ==========>
+
+curl -X POST http://127.0.0.1:5000/api/posts \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer <TOKEN>" \
+-d '{
+  "title": "My New Post",
+  "slug": "my-new-post",
+  "content": "This is the content",
+  "category_id": 1,
+  "published": true
+}'
+
+<=====================================>
+
+
+<==========   UPDATE POST   ==========>
+
+curl -X PUT http://127.0.0.1:5000/api/posts/19 \
+-H "Content-Type: application/json" \
+-H "Authorization: <your_token> \
+-d '{
+  "title": "Updated Test Post",
+  "slug": "updated-test-post-2025",
+  "content": "This is updated content for the test post.",
+  "category_id": 1,
+  "published": true
+}'
+<=====================================>
+
+
+<==========   LIST ALL CAT   ==========>
+curl -X GET http://127.0.0.1:5000/api/categories
+<=====================================>
+
+<==========   CREATE CAT   ==========>
+curl -X POST http://127.0.0.1:5000/api/categories \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer YOUR_JWT_TOKEN_HERE" \
+-d '{
+  "name": "YourCategoryName",
+  "slug": "your-category-slug"
+}'
+<=====================================>
+
+<==========   DELETE CAT   ==========>
+curl -X DELETE http://127.0.0.1:5000/api/categories/CATEGORY_ID_HERE \
+-H "Authorization: Bearer YOUR_JWT_TOKEN_HERE"
+<=====================================>
+
+
+<==========   COMMENT   ==========>
+
+curl -X POST http://127.0.0.1:5000/api/comments/<post_id> \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer YOUR_JWT_TOKEN_HERE" \
+-d '{
+  "content": "This is a test comment from curl"
+}'
+<=====================================>
+
+
+<==========   DELETE COMMENT   ==========>
+
+curl -X DELETE http://127.0.0.1:5000/api/comments/<comment_id> \
+-H "Authorization: Bearer YOUR_JWT_TOKEN_HERE"
+<=====================================>
+
+<=============LIST COMMENTS OF POSTID===============>
+curl -X GET http://127.0.0.1:5000/api/comments/<post_id> \
+-H "Authorization: Bearer <TOKEN>"
+<=====================================>
+
+
