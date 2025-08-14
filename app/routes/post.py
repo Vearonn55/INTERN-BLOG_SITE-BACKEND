@@ -196,3 +196,38 @@ def list_my_posts_route():
 
     response = build_paginated_response(posts, total, pagination)
     return response, 200
+
+@post_bp.route('/<int:post_id>/publish', methods=['PUT'])
+@jwt_required()
+@admin_required
+@with_session
+@spec.validate(
+    resp=Response(HTTP_200=PostOut, HTTP_401=None, HTTP_403=None, HTTP_404=None),
+    tags=["Posts"]
+)
+def publish_post_route(post_id: int):
+    post = get_post_by_id(g.session, post_id)
+    if not post:
+        abort(404, description="Post not found")
+
+    post.published = True
+    g.session.commit()
+
+    data_out = post.model_dump()
+
+    # Fix timestamp formatting
+    if post.created_at:
+        data_out['created_at'] = post.created_at.isoformat()
+    if post.updated_at:
+        data_out['updated_at'] = post.updated_at.isoformat()
+
+    data_out['author'] = {
+        "id": post.author.id,
+        "username": post.author.username
+    }
+    data_out['category'] = {
+        "id": post.category.id,
+        "name": post.category.name
+    }
+
+    return jsonify(data_out), 200

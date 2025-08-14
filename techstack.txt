@@ -1,0 +1,4 @@
+sqlmodel
+pydantic
+fastAPI
+swaggerUI (documentation)
